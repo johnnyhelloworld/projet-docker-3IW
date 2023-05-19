@@ -1,0 +1,51 @@
+version: "3"
+services:
+    nginx:
+        image: nginx:alpine
+        volumes:
+            - .:/src
+        ports:
+            - 8085:80
+
+    php:
+        container_name: php-custom
+        build:
+            context: ./dockerfiles
+            dockerfile: php.Dockerfile
+        volumes:
+            - ./app:/app
+        depends_on:
+            - postgres
+        command: php /app/index.php
+        # restart: always
+
+    composer:
+        build:
+            context: ./dockerfiles
+            dockerfile: composer.Dockerfile
+        volumes:
+            - .:/app
+    
+    postgres:
+        build:
+            context: ./dockerfiles
+            dockerfile: postgres.Dockerfile
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: database
+        volumes:
+            - ./database:/var/lib/postgresql/data
+        ports:
+            - "5433:5432"
+
+    adminer:
+        build:
+            context: ./dockerfiles
+            dockerfile: adminer.Dockerfile
+        depends_on:
+            - postgres
+        volumes:
+            - ./src:/var/www/html
+        ports:
+            - 8082:8080

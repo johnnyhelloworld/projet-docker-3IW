@@ -1,11 +1,12 @@
 <?php
-// // Set up database credentials
-// $host = '172.28.0.2';
-// $dbname = 'database';
-// $username = 'user';
-// $password = 'password';
-// $connect_timeout=999;
 require "conf.inc.php";
+
+// Set up database credentials
+$host = 'postgres';
+$dbname = 'db';
+$username = 'test';
+$password = 'test123';
+$connect_timeout=999;
 
 // Create PDO instance and set error mode
 try {
